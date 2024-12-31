@@ -1,0 +1,74 @@
+-- Step 1: Create the database for the Banking Management System
+CREATE DATABASE IF NOT EXISTS BankingSystem;
+
+-- Step 2: Switch to the BankingSystem database
+USE BankingSystem;
+
+-- Step 3: Create the Customer table
+CREATE TABLE IF NOT EXISTS Customer (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    phone_number VARCHAR(15),
+    address TEXT,
+    date_of_birth DATE
+);
+
+-- Step 4: Create the Account table
+CREATE TABLE IF NOT EXISTS Account (
+    account_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT,
+    account_type VARCHAR(50) NOT NULL,
+    balance DOUBLE NOT NULL DEFAULT 0.0,
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (customer_id) REFERENCES Customer(customer_id) ON DELETE CASCADE
+);
+
+-- Step 5: Create the Transaction table for keeping records of deposits and withdrawals
+CREATE TABLE IF NOT EXISTS Transaction (
+    transaction_id INT AUTO_INCREMENT PRIMARY KEY,
+    account_id INT,
+    transaction_type ENUM('Deposit', 'Withdrawal') NOT NULL,
+    amount DOUBLE NOT NULL,
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (account_id) REFERENCES Account(account_id) ON DELETE CASCADE
+);
+
+-- Step 6: Create the Loan table for managing loans
+CREATE TABLE IF NOT EXISTS Loan (
+    loan_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT,
+    loan_amount DOUBLE NOT NULL,
+    interest_rate DOUBLE NOT NULL,
+    loan_status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
+    loan_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (customer_id) REFERENCES Customer(customer_id) ON DELETE CASCADE
+);
+
+-- Step 7: Insert sample data into the Customer table
+INSERT INTO Customer (first_name, last_name, email, phone_number, address, date_of_birth)
+VALUES 
+    ('John', 'Doe', 'johndoe@example.com', '123-456-7890', '123 Main St, Springfield, IL', '1985-06-15'),
+    ('Jane', 'Smith', 'janesmith@example.com', '098-765-4321', '456 Elm St, Springfield, IL', '1990-09-25');
+
+-- Step 8: Insert sample data into the Account table
+INSERT INTO Account (customer_id, account_type, balance)
+VALUES 
+    (1, 'Savings', 1500.00),
+    (2, 'Checking', 2500.00);
+
+-- Step 9: Insert sample transactions into the Transaction table (Deposit & Withdrawal)
+INSERT INTO Transaction (account_id, transaction_type, amount)
+VALUES 
+    (1, 'Deposit', 1000.00),
+    (1, 'Withdrawal', 500.00),
+    (2, 'Deposit', 2000.00);
+
+-- Step 10: Insert sample loan requests into the Loan table
+INSERT INTO Loan (customer_id, loan_amount, interest_rate, loan_status)
+VALUES 
+    (1, 5000.00, 5.0, 'Approved'),
+    (2, 10000.00, 6.0, 'Pending');
+
+-- Example
