@@ -1,0 +1,16 @@
+project_name/
+│
+├── src/
+│   └── main/
+│       ├── java/
+│       │   └── com/
+│       │       └── yourpackage/
+│       │           ├── model/      # POJO classes
+│       │           ├── dao/        # Data Access Object classes
+│       │           ├── exception/  # Custom exceptions
+│       │           ├── util/       # Utility classes (DB connection, etc.)
+│       │           └── Main.java    # Main entry class
+│       └── resources/
+│           ├── db.properties      # DB connection properties
+│
+└── pom.xml
